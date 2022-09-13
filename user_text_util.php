@@ -1,16 +1,18 @@
 <?php
-	require_once 'User.php';
-	require_once 'UserService.php';
-	require_once 'File.php';
-
+    /* 1 вариант автозагрузки
+    function custom_autoloader($class) {
+        include './' . $class . '.php';
+    }
+    spl_autoload_register('custom_autoloader');*/
+    require 'vendor/autoload.php';
     $delimetr = ';';
     if (isset($argv[1])) {
         if ($argv[1] == 'comma') {
             $delimetr = ',';
         }
     }
-
-    $file = new File();
+    print_r(__DIR__);
+    $file = new Libs\File();
     $users = [];
     $folder = './texts';
     $filename = './people.csv';
@@ -19,7 +21,7 @@
     foreach ($lines as $line) {
         $data = explode($delimetr, trim($line));
         if ($data[0] != 'id') {
-            $users[] = new User($data[0], $data[1]);
+            $users[] = new Libs\User($data[0], $data[1]);
         }
     }
 
@@ -41,19 +43,19 @@
         if ($argv[2] == 'countAverageLineCount') {
             foreach($files as $item) {
                 $idUser = explode('-', trim($item))[0];
-                $user = UserService::getUserById($users, $idUser);
+                $user = Libs\UserService::getUserById($users, $idUser);
                 $user->filesCount += 1;
                 $lines =  $file->read($folder . '/' . $item);
                 $user->lines += count($lines);
             }
-            UserService::outputUsers($users, 'countAverageLineCount');
+            Libs\UserService::outputUsers($users, 'countAverageLineCount');
         }
         if ($argv[2] == 'replaceDates') {
             foreach($files as $item) {
                 $lines =  $file->read($folder . '/' . $item);
                 $text = [];
                 $idUser = explode('-', trim($item))[0];
-                $user = UserService::getUserById($users, $idUser);
+                $user = Libs\UserService::getUserById($users, $idUser);
                 foreach ($lines as $key => $line) {
                     $words = explode(' ', trim($line));
                     foreach ($words as $key => $word) {
@@ -70,7 +72,7 @@
                 }
                 $file->write('./output_texts' . '/' . $item, implode(PHP_EOL, $text));
             }
-            UserService::outputUsers($users, 'replaceDates');
+            Libs\UserService::outputUsers($users, 'replaceDates');
         }
     }
 ?>

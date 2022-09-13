@@ -1,4 +1,5 @@
 <?php
+    namespace Libs;
     class UserService {
         public static function getUserById($users, $id) {
             foreach($users as $user) {

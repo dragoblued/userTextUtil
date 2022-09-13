@@ -1,4 +1,5 @@
 <?php
+    namespace Libs;
     class User {
         public $id, $name, $lines, $filesCount, $replacementCount;
         public function __construct($id, $name) {

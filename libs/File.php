@@ -1,4 +1,5 @@
 <?php
+    namespace Libs;
     class File {
         public function read($file_path) {
             if (!file_exists($file_path)) {
